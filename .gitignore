@@ -1,0 +1,14 @@
+# Archivos y directorios a ignorar en Git para proyecto Django
+# Python
+*.pyc
+*.pyo
+__pycache__
+
+# Django
+*.log
+*.pot
+*.pyc
+
+
+# Entorno virtual
+venv/
