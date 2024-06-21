@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Usuario</title>
+</head>
+<body>
+    {% block content %}
+        <h1>Detalles del Usuario</h1>
+        <p>Nombre: {{ usuario.nombre }}</p>
+        <p>Teléfono: {{ usuario.telefono }}</p>
+        <p>Dirección: {{ usuario.direccion }}</p>
+        <a href="{% url 'signin' %}">Volver</a>
+    {% endblock %}
+</body>
+</html>
