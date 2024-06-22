@@ -13,6 +13,9 @@
         <p>Nombre: {{ usuario.nombre }}</p>
         <p>Teléfono: {{ usuario.telefono }}</p>
         <p>Dirección: {{ usuario.direccion }}</p>
+
+        <a href="{% url 'actualizar_usuario' user_id=usuario.id %}">Actualizar usuario</a>
+        <a href="{% url 'eliminar_usuario' user_id=usuario.id %}">Eliminar usuario</a>
         <a href="{% url 'signin' %}">Volver</a>
     {% endblock %}
 </body>

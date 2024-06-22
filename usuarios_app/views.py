@@ -1,4 +1,4 @@
-from django.shortcuts import render,  get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import UsuarioModel
 
 # Create your views here.
@@ -41,3 +41,23 @@ def signin(request):
 def user_detail(request, user_id):
     usuario = get_object_or_404(UsuarioModel, id=user_id)
     return render(request, 'detalles_usuario.html', {'usuario': usuario})
+
+def actualizar_usuario(request, user_id):
+    usuario = get_object_or_404(UsuarioModel, id=user_id)
+    
+    if request.method == 'POST':
+        nuevo_nombre = request.POST.get('nombre_usuario')
+        usuario.nombre = nuevo_nombre
+        usuario.save()
+        return redirect('user_detail', user_id=user_id)
+    
+    return render(request, 'actualizar_usuario.html', {'usuario': usuario})
+
+def eliminar_usuario(request, user_id):
+    usuario = get_object_or_404(UsuarioModel, id=user_id)
+    
+    if request.method == 'POST':
+        usuario.delete()
+        return redirect('home')  # Redirige a la página principal después de eliminar
+    
+    return render(request, 'eliminar_usuario.html', {'usuario': usuario})
