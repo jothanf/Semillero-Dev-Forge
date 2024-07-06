@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-
+ 
 
 class UsuarioModel(models.Model):
     nombre = models.CharField(max_length=50)

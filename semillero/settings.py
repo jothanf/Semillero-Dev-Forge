@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios_app',
+    'colivings_app',
+    'reservas_app',
+    'mantenimiento_app',
 ]
 
 MIDDLEWARE = [
