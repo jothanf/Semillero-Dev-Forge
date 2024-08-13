@@ -1,0 +1,10 @@
+ColivivingData(
+  id,
+  propietario_nombre, propietario_apellido, propietario_telefono, propietario_email, propietario_experiencia_inmobiliaria,
+  propiedad_nombre, propiedad_direccion, propiedad_rnt, propiedad_capacidad,
+  inquilino_nombre, inquilino_apellido, inquilino_telefono, inquilino_email, inquilino_ocupacion, inquilino_preferencias,
+  habitacion_nombre, habitacion_descripcion, habitacion_precio,
+  reserva_fecha_inicio, reserva_fecha_fin, reserva_estado_pago,
+  empresa_remodelacion_nombre, empresa_remodelacion_telefono, empresa_remodelacion_email,
+  servicio_remodelacion_descripcion, servicio_remodelacion_precio, servicio_remodelacion_fecha_inicio, servicio_remodelacion_fecha_fin
+)

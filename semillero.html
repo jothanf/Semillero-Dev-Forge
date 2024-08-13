@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Desarrollo Semillero</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #0056FF;
+            margin-bottom: 10px;
+            font-size: 20spx;
+        }
+        h2 {
+            color: #0D022C;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+        h3 {
+            color: #0056FF;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #ffffff;
+            margin: 4px 0;
+            padding: 4px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Documentación Desarrollo Semillero</h1>
+    <h3>Crear un software que permita gestionar información de lotes rurales y llevar un seguimiento de clientes interesados, mezclado con contenido de valor tipo blog</h3>
+</header>
+<div class="section">
+    <h2>¿Qué es una Ecodesarrolladora e Inmobiliaria?</h2>
+    <p>Una ecodesarrolladora e inmobiliaria es una empresa que combina prácticas sostenibles con el desarrollo y la comercialización de propiedades. Se centra en crear y promover comunidades que respetan el medio ambiente, integrando principios de permacultura y bioconstrucción en su diseño y desarrollo, tales como ecoaldeas y parcelaciones permaculturales.</p>
+    <p>Este tipo de empresa busca minimizar el impacto ambiental mediante el uso de materiales naturales, la eficiencia energética y la gestión sostenible de recursos. Además, ofrece servicios de apoyo legal y tributario para facilitar transacciones seguras y cumplir con las regulaciones locales.</p>
+    <p>El objetivo principal es fomentar un estilo de vida sostenible y construir comunidades autosuficientes que estén en armonía con la naturaleza, permitiendo el acceso y la democratización de la tierra.</p>
+</div>
+
+<div class="section">
+    <h2>Componentes del Modelo de Negocio</h2>
+    <h3>Hipótesis de la propuesta de negocio</h3>
+    <p>Asegurar una participación en el modelo de negocio de la ecodesarrolladora e inmobiliaria puede ser peligroso puesto que aún no se sabría cómo ejecutarlo, lo ideal es no generar falsas expectativas y ser muy claros.</p>
+    <p>Ahora, ¿Cómo se puede generar un modelo de negocio en esta construcción de MVP?</p>
+    <ol>
+        <li>
+            <strong>Open Source:</strong> Lo primero es gestionar el código creado como Open Source abierto a los desarrolladores y personas de la comunidad en GitHub que permita contar con un producto validado para el portafolio de cada uno de los integrantes. No es un modelo de negocio directo, pero puede generar clientes potenciales para los servicios freelance.
+        </li>
+        <li>
+            <strong>Servicios de desarrollo comunidad Ecodesarrolladora e inmobiliaria:</strong> Al contar con un producto culminado y validado, los aliados de <a href="http://Ecodesarroladores.com">Ecodesarroladores.com</a> tendrán la posibilidad de acceder a los servicios del semillero en sus procesos de desarrollo.
+        </li>
+        <li>
+            <strong>Publicidad:</strong> Tanto InteGrowHome como Vamos Pal Campo, que son las empresas creadoras de <a href="http://ecodesarrolladores.com">ecodesarrolladores.com</a>, se encargarán de publicitar a los integrantes del semillero en sus diferentes canales digitales y tradicionales.
+        </li>
+        <li>
+            <strong>Venta de producto:</strong> Si aparecen en el proceso clientes interesados en la tecnología, con una buena oferta en cuanto al pago, se puede vender el producto y dividir el ingreso en partes iguales según los integrantes que participen en el desarrollo del producto.
+        </li>
+    </ol>
+</div>
+
+
+<div class="section">
+    <h2>Requerimientos ✅</h2>
+    <h3>Módulos del Software</h3>
+    <ul>
+        <li>Registro y Login de Usuarios</li>
+        <li>Roles y Permisos (Administrador, Agente, Cliente)</li>
+        <li>Carga de Información de Lotes (Datos Generales, Ubicación, Precio, Tamaño, etc.)</li>
+        <li>Carga de PDFs y otros documentos (Imágenes, Planos, Documentos Legales)</li>
+        <li>Visualización y Edición de Información de Lotes</li>
+        <li>Filtro y Búsqueda de Lotes</li>
+        <li>Registro y Perfil de Clientes</li>
+        <li>Seguimiento de Intereses (Lotes Favoritos, Interacciones)</li>
+        <li>Historial de Contacto y Notas</li>
+        <li>Sección contenido de valor</li>
+    </ul>
+
+    <h3>Pasos para el Desarrollo</h3>
+    <ul>
+        <li>Reunir todos los requisitos específicos del negocio.</li>
+        <li>Mockups y Prototipos de la Interfaz de Usuario.</li>
+        <li>Diseño de la Base de Datos y Estructura de Datos.</li>
+        <li>Creación de componentes de interfaz.</li>
+        <li>Implementación de formularios de carga de datos y documentos.</li>
+        <li>Configuración de la base de datos.</li>
+        <li>Implementación de endpoints para CRUD de lotes, clientes y contenido de valor.</li>
+        <li>Integración de servicios de almacenamiento para PDFs y otros documentos.</li>
+        <li>Pruebas unitarias y de integración.</li>
+        <li>Asegurar la interoperabilidad entre frontend y backend.</li>
+        <li>Despliegue en un servidor o en la nube.</li>
+        <li>Monitoreo y mantenimiento continuo del sistema.</li>
+    </ul>
+
+    <h3>Funcionalidades Específicas</h3>
+    <ul>
+        <li>Formulario para ingresar datos básicos del lote.</li>
+        <li>Opción para cargar múltiples archivos PDF y otros documentos.</li>
+        <li>Subida de imágenes.</li>
+        <li>Sistema de validación para asegurar que todos los campos necesarios estén completos.</li>
+        <li>Creación de plantilla de información con la información subida de las propiedades.</li>
+        <li>Panel de administración donde los agentes pueden ver el historial de interacciones con cada cliente.</li>
+        <li>Sistema de notificaciones que alerta a los agentes cuando un cliente muestra interés en un lote específico.</li>
+        <li>Administración de contenido.</li>
+    </ul>
+
+    <h3>Arquitectura del Sistema</h3>
+    <ul>
+        <li><strong>Lenguaje:</strong> Python</li>
+        <li><strong>Frameworks:</strong> Django</li>
+        <li><strong>Librerías:</strong> React</li>
+        <li><strong>Base de Datos:</strong> MySQL</li>
+        <li>Integración con el Backend para la carga y gestión de archivos.</li>
+        <li>JWT (JSON Web Tokens) para Autenticación.</li>
+        <li>OAuth para Integración con Servicios Externos.</li>
+    </ul>
+
+    <h3>Participación en la Propiedad del Código</h3>
+    <ul>
+        <li>Ofrecer a los miembros del semillero una participación en la propiedad del desarrollo del código - Open Source en el cual todos puedan tener acceso desde Github.</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Flujo de Procesos Desarrollo Seis Semanas</h2>
+
+    <h3>Cronograma de 6 Semanas para el Desarrollo del MVP</h3>
+
+    <h4>Semana 1: Definición y Prototipos</h4>
+    <ul>
+        <li><strong>Lunes (Reunión Completa):</strong> Reunión inicial para reunir todos los requisitos específicos del negocio y definir el alcance del MVP.</li>
+        <li><strong>Martes (Equipo Front):</strong> Sesión de trabajo en grupo para crear mockups y prototipos de la interfaz de usuario.</li>
+        <li><strong>Jueves (Equipo Back):</strong> Revisión de requisitos y alineación sobre el diseño de la base de datos.</li>
+        <li><strong>Tareas:</strong>
+            <ul>
+                <li>Documentar requisitos.</li>
+                <li>Crear mockups de al menos 3 pantallas clave (Inicio, Registro, Visualización de Lotes).</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>Semana 2: Diseño de Base de Datos y Configuración Inicial</h4>
+    <ul>
+        <li><strong>Lunes (Reunión Completa):</strong> Revisión de los mockups y ajustes basados en el feedback del equipo.</li>
+        <li><strong>Martes (Equipo Front):</strong> Diseño de la base de datos y estructura de datos (modelos relacionales en MySQL).</li>
+        <li><strong>Jueves (Equipo Back):</strong> Configuración de la base de datos y discusión sobre la integración con el backend.</li>
+        <li><strong>Tareas:</strong>
+            <ul>
+                <li>Definir tablas y relaciones necesarias.</li>
+                <li>Configurar el entorno de desarrollo con Django y React.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>Semana 3: Desarrollo de Funcionalidades Básicas</h4>
+    <ul>
+        <li><strong>Lunes (Reunión Completa):</strong> Creación de componentes de interfaz (registro, login, carga de información de lotes).</li>
+        <li><strong>Martes (Equipo Front):</strong> Implementación de formularios de carga de datos y documentos.</li>
+        <li><strong>Jueves (Equipo Back):</strong> Desarrollo de endpoints para el registro y autenticación de usuarios.</li>
+        <li><strong>Tareas:</strong>
+            <ul>
+                <li>Desarrollar el formulario de registro y login.</li>
+                <li>Implementar la carga de datos de lotes y documentos.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>Semana 4: CRUD y Integración de Documentos</h4>
+    <ul>
+        <li><strong>Lunes (Reunión Completa):</strong> Implementación de endpoints para el CRUD de lotes y clientes.</li>
+        <li><strong>Martes (Equipo Front):</strong> Integración de servicios de almacenamiento para PDFs y otros documentos.</li>
+        <li><strong>Jueves (Equipo Back):</strong> Desarrollo y prueba de los endpoints CRUD.</li>
+        <li><strong>Tareas:</strong>
+            <ul>
+                <li>Crear y probar los endpoints necesarios.</li>
+                <li>Implementar la lógica para la carga y visualización de archivos.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>Semana 5: Interacción y Visualización</h4>
+    <ul>
+        <li><strong>Lunes (Reunión Completa):</strong> Desarrollo de la funcionalidad de filtro y búsqueda de lotes.</li>
+        <li><strong>Martes (Equipo Front):</strong> Implementación de la visualización de datos de clientes y lotes.</li>
+        <li><strong>Jueves (Equipo Back):</strong> Ajustes finales en los endpoints para la visualización.</li>
+        <li><strong>Tareas:</strong>
+            <ul>
+                <li>Crear la interfaz de visualización de lotes y clientes.</li>
+                <li>Implementar la lógica de búsqueda y filtrado.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h4>Semana 6: Pruebas y Despliegue</h4>
+    <ul>
+        <li><strong>Lunes (Reunión Completa):</strong> Planificación de pruebas unitarias y de integración.</li>
+        <li><strong>Martes (Equipo Front):</strong> Realizar pruebas en los componentes de interfaz.</li>
+        <li><strong>Jueves (Equipo Back):</strong> Realizar pruebas de los endpoints y ajustes finales.</li>
+        <li><strong>Tareas:</strong>
+            <ul>
+                <li>Ejecutar pruebas en todo el sistema.</li>
+                <li>Preparar la documentación para el despliegue en el servidor.</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
