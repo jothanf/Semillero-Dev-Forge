@@ -43,10 +43,10 @@ INSTALLED_APPS = [
     'coreapi',
     'rest_framework',
 
-    'usuarios_app',
-    'colivings_app',
-    'reservas_app',
-    'mantenimiento_app',
+    'user_app',
+    'CRM_app',
+    'MLS_app',
+    'blog_app',
 ]
 
 MIDDLEWARE = [
@@ -143,3 +143,5 @@ CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
 }
+
+AUTH_USER_MODEL = 'user_app.CustomUser'
