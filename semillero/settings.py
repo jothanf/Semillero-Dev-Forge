@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'coreapi',
     'rest_framework',
+    'rest_framework.authtoken',
 
     'user_app',
     'CRM_app',
@@ -141,7 +142,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
 
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    
 }
 
-AUTH_USER_MODEL = 'user_app.CustomUser'
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ],
+}
+
