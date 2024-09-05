@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div id="hero">
+    <div id="hero-ptm">
+        <h1>Bienvenido a nuestra plataforma</h1>
+        <p>Transformando sueños en hogares: tu futuro comienza aquí</p>
+    </div>
+    <div id="hero-filter-properties">
+        <div class="buscar-propiedades">
+            <button class="buscar-btn" onclick="toggleForm('.form-busqueda')">Buscar propiedades</button>
+            <div class="form-busqueda">
+                <label for="tipo-propiedad">Tipo de propiedad</label>
+                <select id="tipo-propiedad" name="tipo-propiedad">
+                    <option value="casa">Casa</option>
+                    <option value="apartamento">Apartamento</option>
+                    <option value="oficina">Oficina</option>
+                    <option value="local">Local</option>
+                </select>
+
+                <label for="presupuesto-min">Presupuesto mínimo</label>
+                <input type="number" id="presupuesto-min" name="presupuesto-min" placeholder="Ej: 50000000">
+
+                <label for="presupuesto-max">Presupuesto máximo</label>
+                <input type="number" id="presupuesto-max" name="presupuesto-max" placeholder="Ej: 200000000">
+
+                <label for="ubicacion">Ubicación</label>
+                <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Medellín">
+
+                <button type="submit">Buscar</button>
+            </div>
+        </div>
+    </div>
+    <div id="hero-filter-properties">
+        <div class="buscar-propiedades">
+            <button class="buscar-btn" onclick="toggleForm('.links')">links</button>
+            <div class="links">
+                <div class="link-list" id="links">
+                    <a href="{% url 'home' %}" class="button">Home</a>
+                    <a href="{% url 'agent_anamnesis_detail' %}" class="button">Agent Anamnesis Detail</a>
+                    <a href="{% url 'agent_anamnesis_register' %}" class="button">Agent Anamnesis Register</a>
+                    <a href="{% url 'agent_card_profile' %}" class="button">Agent Card Profile</a>
+                    <a href="{% url 'agent_crm_customer_detail' %}" class="button">Agent CRM Customer Detail</a>
+                    <a href="{% url 'agent_crm_home' %}" class="button">Agent CRM Home</a>
+                    <a href="{% url 'agent_crm_register_customer' %}" class="button">Agent CRM Register Customer</a>
+                    <a href="{% url 'agent_home' %}" class="button">Agent Home</a>
+                    <a href="{% url 'agent_mls_home' %}" class="button">Agent MLS Home</a>
+                    <a href="{% url 'agent_mls_property_detail' %}" class="button">Agent MLS Property Detail</a>
+                    <a href="{% url 'agent_mls_property_register' %}" class="button">Agent MLS Property Register</a>
+                    <a href="{% url 'agent_profile' %}" class="button">Agent Profile</a>
+                    <a href="{% url 'agent_requirement_detail' %}" class="button">Agent Requirement Detail</a>
+                    <a href="{% url 'agent_wallet_home' %}" class="button">Agent Wallet Home</a>
+                    <a href="{% url 'agente_register_requirement' %}" class="button">Agente Register Requirement</a>
+                    <a href="{% url 'blog_article' %}" class="button">Blog Article</a>
+                    <a href="{% url 'blogs' %}" class="button">Blogs</a>
+                    <a href="{% url 'business_presentation' %}" class="button">Business Presentation</a>
+                    <a href="{% url 'calendar' %}" class="button">Calendar</a>
+                    <a href="{% url 'contact' %}" class="button">Contact</a>
+                    <a href="{% url 'customer_anamnesis' %}" class="button">Customer Anamnesis</a>
+                    <a href="{% url 'customer_home' %}" class="button">Customer Home</a>
+                    <a href="{% url 'customer_requirement_detail' %}" class="button">Customer Requirement Detail</a>
+                    <a href="{% url 'customer_wallet_home' %}" class="button">Customer Wallet Home</a>
+                    <a href="{% url 'market_place' %}" class="button">Market Place</a>
+                    <a href="{% url 'property_technical_sheet' %}" class="button">Property Technical Sheet</a>
+                    <a href="{% url 'signin' %}" class="button">Sign In</a>
+                    <a href="{% url 'signup' %}" class="button">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.form-busqueda').style.display = 'none';
+    document.querySelector('.links').style.display = 'none';
+
+    function toggleForm(selector) {
+        var form = document.querySelector(selector);
+        form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

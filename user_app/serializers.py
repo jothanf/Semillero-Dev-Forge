@@ -3,40 +3,23 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import UserAgentModel, UserCustomerModel
 
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
 
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['first_name', 'last_name', 'email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        # Crear el usuario utilizando email en lugar de username
         user = User.objects.create_user(
-            username=validated_data['username'],
+            username=validated_data['email'],  # Asignar el email al campo username
             email=validated_data['email'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', ''),
             password=validated_data['password']
         )
         return user
-
-class UserLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        username = data.get("username")
-        password = data.get("password")
-        
-        user = authenticate(username=username, password=password)
-        
-        if user is None:
-            raise serializers.ValidationError("Credenciales no válidas.")
-        
-        if not user.is_active:
-            raise serializers.ValidationError("Usuario inactivo.")
-        
-        return {
-            'user': user
-        }
 
 
 class UserAgentSerializer(serializers.ModelSerializer):
@@ -44,13 +27,16 @@ class UserAgentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserAgentModel
-        fields = ['user', 'nickname', 'phone']
+        fields = ['user', 'phone']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
+        # Crear el usuario sin 'username', usando 'email' para el campo username
         user = User.objects.create_user(
-            username=user_data['username'],
+            username=user_data['email'],  # Asignar el email al campo username
             email=user_data['email'],
+            first_name=user_data['first_name'],
+            last_name=user_data.get('last_name', ''),
             password=user_data['password']
         )
         user_agent = UserAgentModel.objects.create(user=user, **validated_data)
@@ -60,11 +46,12 @@ class UserAgentSerializer(serializers.ModelSerializer):
         user_data = validated_data.pop('user')
         user = instance.user
 
-        instance.nickname = validated_data.get('nickname', instance.nickname)
-        instance.telefono = validated_data.get('telefono', instance.telefono)
+        instance.phone = validated_data.get('phone', instance.phone)
 
-        user.username = user_data.get('username', user.username)
+        user.first_name = user_data.get('first_name', user.first_name)
+        user.last_name = user_data.get('last_name', user.last_name)
         user.email = user_data.get('email', user.email)
+        user.username = user_data.get('email', user.username)  # Actualizar también el username
         if 'password' in user_data:
             user.set_password(user_data['password'])
 
@@ -72,44 +59,29 @@ class UserAgentSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-    
-class UserAgentLoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-    
-    def validate(self, data):
-        username = data.get("username")
-        password = data.get("password")
 
-        user = authenticate(username=username, password=password)
-        
-        if user is None:
-            raise serializers.ValidationError("Credenciales no válidas.")
-        
-        if not user.is_active:
-            raise serializers.ValidationError("Usuario inactivo.")
-        
-        try:
-            user_agent = UserAgentModel.objects.get(user=user)
-        except UserAgentModel.DoesNotExist:
-            raise serializers.ValidationError("El usuario no es un agente.")
-        
-        return {
-            'user': user,
-            'user_agent': user_agent
-        }
-    
+
 class UserCustomerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    agent = serializers.PrimaryKeyRelatedField(queryset=UserAgentModel.objects.all())
+    agent = serializers.PrimaryKeyRelatedField(queryset=UserAgentModel.objects.all(), allow_null=True, required=False)
 
     class Meta:
         model = UserCustomerModel
-        fields = ['user', 'agent', 'phone', 'owner']
+        fields = ['user', 'agent', 'phone', 'buy', 'sell', 'build', 'blog']
+        extra_kwargs = {
+            'phone': {'required': False, 'allow_blank': True},
+            'agent': {'required': False, 'allow_null': True}
+        }
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        user = User.objects.create_user(**user_data)
+        user = User.objects.create_user(
+            username=user_data['email'],  # Asignar el email al campo username
+            email=user_data['email'],
+            first_name=user_data['first_name'],
+            last_name=user_data.get('last_name', ''),
+            password=user_data['password']
+        )
         return UserCustomerModel.objects.create(user=user, **validated_data)
 
     def update(self, instance, validated_data):
@@ -117,10 +89,16 @@ class UserCustomerSerializer(serializers.ModelSerializer):
         user = instance.user
 
         instance.phone = validated_data.get('phone', instance.phone)
-        instance.owner = validated_data.get('owner', instance.owner)
+        instance.buy = validated_data.get('buy', instance.buy)
+        instance.sell = validated_data.get('sell', instance.sell)
+        instance.build = validated_data.get('build', instance.build)
+        instance.blog = validated_data.get('blog', instance.blog)
+        instance.agent = validated_data.get('agent', instance.agent)
 
-        user.username = user_data.get('username', user.username)
+        user.first_name = user_data.get('first_name', user.first_name)
+        user.last_name = user_data.get('last_name', user.last_name)
         user.email = user_data.get('email', user.email)
+        user.username = user_data.get('email', user.username)  # Actualizar también el username
         if 'password' in user_data:
             user.set_password(user_data['password'])
 
@@ -128,3 +106,30 @@ class UserCustomerSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+
+
+class SignInSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        email = data.get("email")
+        password = data.get("password")
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("Correo electrónico no registrado.")
+
+        # Autenticar usando el email como username
+        user = authenticate(username=user.email, password=password)
+
+        if user is None:
+            raise serializers.ValidationError("Credenciales no válidas.")
+        
+        if not user.is_active:
+            raise serializers.ValidationError("El usuario está inactivo.")
+
+        return {
+            'user': user,
+        }

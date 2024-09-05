@@ -11,9 +11,12 @@ class UserAgentModel(models.Model):
 
 class UserCustomerModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    agent = models.ForeignKey(UserAgentModel, on_delete=models.CASCADE, related_name='customers')
-    phone = models.CharField(max_length=15)
-    owner = models.BooleanField(default=False)
-
+    agent = models.ForeignKey(UserAgentModel, on_delete=models.CASCADE, related_name='customers', null=True, blank=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    buy = models.BooleanField(default=False)
+    sell = models.BooleanField(default=False)
+    build = models.BooleanField(default=False)
+    blog = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.user.username

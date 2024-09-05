@@ -1,0 +1,128 @@
+/* Colores */
+:root {
+    --color-verde: #00FF00;
+    --color-blanco: #FFFFFF;
+    --color-gris-oscuro: #2C2C2C;
+    --color-verde-oscuro: #006400;
+    --color-acento: var(--color-verde-oscuro);
+}
+
+/* Estilos generales para los elementos nav */
+nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-gris-oscuro);
+    padding: 10px;
+}
+
+nav a {
+    color: var(--color-blanco);
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+nav a h1 {
+    color: var(--color-verde);
+}
+
+nav a button {
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+nav a button:hover {
+    background-color: var(--color-verde);
+    color: var(--color-gris-oscuro);
+}
+
+#hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 75vh;
+    text-align: center;
+}
+
+#hero-ptm {
+    margin-bottom: 20px;
+}
+
+#hero-filter-properties {
+    width: 100%;
+}
+
+.buscar-propiedades {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buscar-btn {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: var(--color-acento);
+    color: var(--color-blanco);
+    border: none;
+    cursor: pointer;
+}
+
+.form-busqueda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-busqueda label,
+.form-busqueda input,
+.form-busqueda select,
+.form-busqueda button {
+    margin-bottom: 10px;
+    width: 80%;
+    max-width: 400px;
+}
+
+/* Estilo para el menú desplegable */
+.menu {
+    display: none;
+    flex-direction: column;
+    background-color: var(--color-gris-oscuro);
+    padding: 10px;
+    align-items: center;
+}
+
+.menu a {
+    color: var(--color-blanco);
+    text-decoration: none;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.menu a button {
+    background-color: var(--color-verde-oscuro);
+    color: var(--color-blanco);
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.menu a button:hover {
+    background-color: var(--color-verde);
+    color: var(--color-gris-oscuro);
+}
+
+/* Estilo para la lista de enlaces */
+.link-list {
+    display: flex;
+    flex-direction: column; /* Cambia a columna para una lista vertical */
+    align-items: center; /* Centra los elementos horizontalmente */
+}
+
+.link-list a {
+    margin-bottom: 10px; /* Espacio entre enlaces */
+}

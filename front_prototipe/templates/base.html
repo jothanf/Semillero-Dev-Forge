@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <title>{% block title %}Base{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}"><h1>Logotipo</h1></a>
+        <a href="{% url 'calendar' %}"><button>Consultoria</button></a>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <nav id="nav-down">
+        <a href="{% url 'market_place' %}"><button>Inventario</button></a>
+        <button class="menu-btn" onclick="toggleForm('.menu')">Menu</button>
+        <div class="menu">
+            <a href="{% url 'business_presentation' %}"><button>Nuestro proposito</button></a>
+            <a href="{% url 'blogs' %}"><button>Contenido de valor</button></a>
+            <a href="{% url 'contact' %}"><button>Contacto</button></a>
+        </div>
+        <a href="{% url 'agent_wallet_home' %}"><button>Wallet Agente</button></a>
+        <a href="{% url 'customer_wallet_home' %}"><button>Wallet Customer</button></a>
+    </nav>
+
+    <script>
+        document.querySelector('.menu').style.display = 'none';
+
+        function toggleForm(selector) {
+            var form = document.querySelector(selector);
+            form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

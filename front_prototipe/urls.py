@@ -1,0 +1,33 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('home/', views.home, name='home'),
+    path('agent_anamnesis_detail/', views.agent_anamnesis_detail, name='agent_anamnesis_detail'),
+    path('agent_anamnesis_register/', views.agent_anamnesis_register, name='agent_anamnesis_register'),
+    path('agent_card_profile/', views.agent_card_profile, name='agent_card_profile'),
+    path('agent_crm_customer_detail/', views.agent_crm_customer_detail, name='agent_crm_customer_detail'),
+    path('agent_crm_home/', views.agent_crm_home, name='agent_crm_home'),
+    path('agent_crm_register_customer/', views.agent_crm_register_customer, name='agent_crm_register_customer'),
+    path('agent_home/', views.agent_home, name='agent_home'),
+    path('agent_mls_home/', views.agent_mls_home, name='agent_mls_home'),
+    path('agent_mls_property_detail/', views.agent_mls_property_detail, name='agent_mls_property_detail'),
+    path('agent_mls_property_register/', views.agent_mls_property_register, name='agent_mls_property_register'),
+    path('agent_profile/', views.agent_profile, name='agent_profile'),
+    path('agent_requirement_detail/', views.agent_requirement_detail, name='agent_requirement_detail'),
+    path('agent_wallet_home/', views.agent_wallet_home, name='agent_wallet_home'),
+    path('agente_register_requirement/', views.agente_register_requirement, name='agente_register_requirement'),
+    path('blog_article/', views.blog_article, name='blog_article'),
+    path('blogs/', views.blogs, name='blogs'),
+    path('business_presentation/', views.business_presentation, name='business_presentation'),
+    path('calendar/', views.calendar, name='calendar'),
+    path('contact/', views.contact, name='contact'),
+    path('customer_anamnesis/', views.customer_anamnesis, name='customer_anamnesis'),
+    path('customer_home/', views.customer_home, name='customer_home'),
+    path('customer_requirement_detail/', views.customer_requirement_detail, name='customer_requirement_detail'),
+    path('customer_wallet_home/', views.customer_wallet_home, name='customer_wallet_home'),
+    path('market_place/', views.market_place, name='market_place'),
+    path('property_technical_sheet/', views.property_technical_sheet, name='property_technical_sheet'),
+    path('signin/', views.signin, name='signin'),
+    path('signup/', views.signup, name='signup'),
+]
