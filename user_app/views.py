@@ -4,7 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import logout
-from .serializers import UserAgentSerializer, SignInSerializer, UserCustomerSerializer
+from .serializers import (
+    UserAgentSerializer, 
+    SignInSerializer, 
+    UserCustomerCreateSerializer, 
+    UserCustomerCompleteSerializer
+)
+from .models import UserCustomerModel
 
 # Crear UserAgent
 class UserAgentSignupView(APIView):
@@ -33,15 +39,31 @@ class UserAgentSignoutView(APIView):
         
         return response
 
-# Crear UserCustomer
-class UserCustomerSignupView(APIView):
+# Crear UserCustomer (registro inicial)
+class UserCustomerInitialSignupView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = UserCustomerSerializer(data=request.data)
+        serializer = UserCustomerCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response({"message": "Usuario creado con éxito", "user_id": user.id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Completar perfil de UserCustomer
+class UserCustomerCompleteSignupView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            user_customer = UserCustomerModel.objects.get(user=request.user)
+        except UserCustomerModel.DoesNotExist:
+            return Response({"error": "Usuario cliente no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserCustomerCompleteSerializer(user_customer, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"message": "Cliente creado con éxito"}, status=status.HTTP_201_CREATED)
+            return Response({"message": "Información de cliente completada con éxito"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Cerrar sesión UserCustomer
@@ -75,19 +97,21 @@ class UserSigninView(APIView):
             if hasattr(user, 'useragentmodel'):
                 user_type = 'agent'
                 user_agent = user.useragentmodel
+                user_data = UserAgentSerializer(user_agent).data
             elif hasattr(user, 'usercustomermodel'):
                 user_type = 'customer'
                 user_agent = user.usercustomermodel
+                user_data = UserCustomerCompleteSerializer(user_agent).data
             else:
                 user_type = 'unknown'
-                user_agent = None
+                user_data = None
 
             # Crear respuesta con token como cookie HttpOnly
             response = Response({
                 "token": token.key,
                 "message": "Inicio de sesión exitoso",
                 "user_type": user_type,
-                "user_data": UserAgentSerializer(user_agent).data if user_type == 'agent' else UserCustomerSerializer(user_agent).data if user_type == 'customer' else None
+                "user_data": user_data
             }, status=status.HTTP_200_OK)
             
             # Configurar la cookie HttpOnly

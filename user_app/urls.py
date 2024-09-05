@@ -4,7 +4,8 @@ from .views import (
     UserAgentSignupView, 
     UserSigninView, 
     UserAgentSignoutView,
-    UserCustomerSignupView,
+    UserCustomerInitialSignupView,
+    UserCustomerCompleteSignupView,
     UserCustomerSignoutView
 )
 
@@ -12,7 +13,9 @@ urlpatterns = [
     path('api/signup_agent/', UserAgentSignupView.as_view(), name='signup_agent'),
     path('api/signout_agent/', UserAgentSignoutView.as_view(), name='signout_agent'),
 
-    path('api/signup_customer/', UserCustomerSignupView.as_view(), name='signup_customer'),
+    path('api/signup_customer_initial/', UserCustomerInitialSignupView.as_view(), name='signup_customer_initial'),
+    path('api/signup_customer_complete/', UserCustomerCompleteSignupView.as_view(), name='signup_customer_complete'),
+
     path('api/signout_customer/', UserCustomerSignoutView.as_view(), name='signout_customer'),
 
     path('api/signin/', UserSigninView.as_view(), name='signin'),

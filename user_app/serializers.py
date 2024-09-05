@@ -60,34 +60,33 @@ class UserAgentSerializer(serializers.ModelSerializer):
 
         return instance
 
+class UserCustomerCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
 
-class UserCustomerSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("El correo ya se encuentra en uso.")
+        return value
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['email'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
+
+class UserCustomerCompleteSerializer(serializers.ModelSerializer):
     agent = serializers.PrimaryKeyRelatedField(queryset=UserAgentModel.objects.all(), allow_null=True, required=False)
 
     class Meta:
         model = UserCustomerModel
-        fields = ['user', 'agent', 'phone', 'buy', 'sell', 'build', 'blog']
-        extra_kwargs = {
-            'phone': {'required': False, 'allow_blank': True},
-            'agent': {'required': False, 'allow_null': True}
-        }
-
-    def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user = User.objects.create_user(
-            username=user_data['email'],  # Asignar el email al campo username
-            email=user_data['email'],
-            first_name=user_data['first_name'],
-            last_name=user_data.get('last_name', ''),
-            password=user_data['password']
-        )
-        return UserCustomerModel.objects.create(user=user, **validated_data)
+        fields = ['agent', 'phone', 'buy', 'sell', 'build', 'blog']
 
     def update(self, instance, validated_data):
-        user_data = validated_data.pop('user')
-        user = instance.user
-
         instance.phone = validated_data.get('phone', instance.phone)
         instance.buy = validated_data.get('buy', instance.buy)
         instance.sell = validated_data.get('sell', instance.sell)
@@ -95,16 +94,7 @@ class UserCustomerSerializer(serializers.ModelSerializer):
         instance.blog = validated_data.get('blog', instance.blog)
         instance.agent = validated_data.get('agent', instance.agent)
 
-        user.first_name = user_data.get('first_name', user.first_name)
-        user.last_name = user_data.get('last_name', user.last_name)
-        user.email = user_data.get('email', user.email)
-        user.username = user_data.get('email', user.username)  # Actualizar también el username
-        if 'password' in user_data:
-            user.set_password(user_data['password'])
-
-        user.save()
         instance.save()
-
         return instance
 
 
