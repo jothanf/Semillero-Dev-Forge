@@ -60,11 +60,15 @@ class UserAgentSerializer(serializers.ModelSerializer):
 
         return instance
 
+
+
 class UserCustomerCreateSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(write_only=True)
+    password = serializers.CharField(write_only=True)
+
     class Meta:
-        model = User
-        fields = ['email', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
+        model = UserCustomerModel
+        fields = ['email', 'password', 'phone', 'buy', 'sell', 'build', 'blog']
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
@@ -72,12 +76,20 @@ class UserCustomerCreateSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        email = validated_data.pop('email')
+        password = validated_data.pop('password')
+
         user = User.objects.create_user(
-            username=validated_data['email'],
-            email=validated_data['email'],
-            password=validated_data['password']
+            username=email,
+            email=email,
+            password=password
         )
-        return user
+
+        user_customer = UserCustomerModel.objects.create(
+            user=user,
+            **validated_data
+        )
+        return user_customer
 
 class UserCustomerCompleteSerializer(serializers.ModelSerializer):
     agent = serializers.PrimaryKeyRelatedField(queryset=UserAgentModel.objects.all(), allow_null=True, required=False)

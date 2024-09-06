@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.documentation import include_docs_urls
 from .views import (
     UserAgentSignupView, 
@@ -6,7 +7,8 @@ from .views import (
     UserAgentSignoutView,
     UserCustomerInitialSignupView,
     UserCustomerCompleteSignupView,
-    UserCustomerSignoutView
+    UserCustomerSignoutView,
+    CheckSessionView,
 )
 
 urlpatterns = [
@@ -21,4 +23,9 @@ urlpatterns = [
     path('api/signin/', UserSigninView.as_view(), name='signin'),
 
     path('docs/', include_docs_urls(title='API Documentation')),
+
+    path('api/check_session/', CheckSessionView.as_view(), name='check_session'),
+
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

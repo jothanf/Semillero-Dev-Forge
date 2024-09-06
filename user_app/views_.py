@@ -1,4 +1,4 @@
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,6 +34,7 @@ class UserAgentSignoutView(APIView):
             user.auth_token.delete()  # Eliminar el token
         logout(request)
         
+        # Eliminar la cookie HttpOnly
         response = Response({"message": "Cierre de sesión exitoso"}, status=status.HTTP_200_OK)
         response.delete_cookie('auth_token')  # Eliminar cookie
         
@@ -49,12 +50,14 @@ class UserCustomerInitialSignupView(APIView):
             email = serializer.validated_data['email']
             password = serializer.validated_data['password']
             
+            # Create User instance
             user = User.objects.create_user(
                 username=email,
                 email=email,
                 password=password
             )
             
+            # Create a basic UserCustomerModel instance
             user_customer = UserCustomerModel.objects.create(user=user)
             
             return Response({
@@ -89,12 +92,16 @@ class UserCustomerSignoutView(APIView):
             user.auth_token.delete()  # Eliminar el token
         logout(request)
         
+        # Eliminar la cookie HttpOnly
         response = Response({"message": "Cierre de sesión exitoso"}, status=status.HTTP_200_OK)
         response.delete_cookie('auth_token')  # Eliminar cookie
         
         return response
 
 # Iniciar sesión UserAgent y UserCustomer
+
+from rest_framework_simplejwt.tokens import RefreshToken
+
 class UserSigninView(APIView):
     permission_classes = [AllowAny]
 
@@ -115,7 +122,56 @@ class UserSigninView(APIView):
             }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Verificar sesión
+
+"""
+class UserSigninView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = SignInSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            token, created = Token.objects.get_or_create(user=user)
+
+            # Determinar el tipo de usuario
+            user_agent = None
+            if hasattr(user, 'useragentmodel'):
+                user_type = 'agent'
+                user_agent = user.useragentmodel
+                user_data = UserAgentSerializer(user_agent).data
+            elif hasattr(user, 'usercustomermodel'):
+                user_type = 'customer'
+                user_agent = user.usercustomermodel
+                user_data = UserCustomerCompleteSerializer(user_agent).data
+            else:
+                user_type = 'unknown'
+                user_data = None
+
+            # Crear respuesta con token como cookie HttpOnly
+            response = Response({
+                "token": token.key,
+                "message": "Inicio de sesión exitoso",
+                "user_type": user_type,
+                "user_data": user_data
+            }, status=status.HTTP_200_OK)
+            
+            # Configurar la cookie HttpOnly
+            response.set_cookie(
+                key='auth_token',
+                value=token.key,
+                httponly=True,
+                samesite='Lax',
+                secure=True 
+            )
+            
+            return response
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+"""
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
 class CheckSessionView(APIView):
     permission_classes = [IsAuthenticated]
 
