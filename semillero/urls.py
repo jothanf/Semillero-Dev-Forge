@@ -17,6 +17,28 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+"""
+    Documentacion con swagger
+"""
+
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="API Semillero",
+      default_version='v1',
+      description="Documentación de la API para el proyecto Semillero",
+      terms_of_service="https://www.tusitio.com/terms/",
+      contact=openapi.Contact(email="soporte@tusitio.com"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', include('front_prototipe.urls')),
@@ -24,4 +46,7 @@ urlpatterns = [
     path('crm/', include('CRM_app.urls')),
     path('mls/', include('MLS_app.urls')),
     path('blog/', include('blog_app.urls')),
+
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

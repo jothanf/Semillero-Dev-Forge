@@ -9,6 +9,7 @@ from .views import (
     UserCustomerCompleteSignupView,
     UserCustomerSignoutView,
     CheckSessionView,
+    ConsultUserCustomerById,
 )
 
 urlpatterns = [
@@ -21,6 +22,8 @@ urlpatterns = [
     path('api/signout_customer/', UserCustomerSignoutView.as_view(), name='signout_customer'),
 
     path('api/signin/', UserSigninView.as_view(), name='signin'),
+
+    path('api/consult_customer/<int:id>/', ConsultUserCustomerById.as_view(), name='consult_customer'),
 
     path('docs/', include_docs_urls(title='API Documentation')),
 

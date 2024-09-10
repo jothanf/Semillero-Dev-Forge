@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'coreapi',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
 
     'front_prototipe',
     'user_app',
