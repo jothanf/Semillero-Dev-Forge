@@ -10,6 +10,10 @@ from .views import (
     UserCustomerSignoutView,
     CheckSessionView,
     ConsultUserCustomerById,
+    oauth2_callback,
+    start_auth_flow,
+    UserCustomerOAuth2SignupView,
+    VerifyEmailView,
 )
 
 urlpatterns = [
@@ -31,4 +35,10 @@ urlpatterns = [
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    path('oauth2callback/', oauth2_callback, name='oauth2callback'),
+    path('start-auth/', start_auth_flow, name='start_auth_flow'),
+
+    path('api/signup_customer_oauth2/', UserCustomerOAuth2SignupView.as_view(), name='signup_customer_oauth2'),
+    path('api/verify_email/', VerifyEmailView.as_view(), name='verify_email'),
 ]

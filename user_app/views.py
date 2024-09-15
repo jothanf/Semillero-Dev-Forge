@@ -246,3 +246,186 @@ class ConsultUserCustomerById(APIView):
 
         serializer = UserCustomerCompleteSerializer(user_customer)
         return Response(serializer.data)
+    
+## Verificación con Oauth2
+from django.shortcuts import redirect
+from google_auth_oauthlib.flow import Flow
+import os
+
+import os
+from django.shortcuts import redirect
+from google_auth_oauthlib.flow import Flow
+import os
+
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'  # Permitir OAuth inseguro en desarrollo
+
+def oauth2_callback(request):
+    flow = Flow.from_client_secrets_file(
+        os.path.join(os.path.dirname(__file__), 'credentials.json'),
+        scopes=['https://www.googleapis.com/auth/gmail.send'],
+        redirect_uri='http://localhost:8000/oauth2callback/'
+    )
+    
+    flow.fetch_token(authorization_response=request.build_absolute_uri())
+    credentials = flow.credentials
+
+    # Aquí puedes almacenar las credenciales o usarlas para hacer peticiones a Gmail
+    # Por ejemplo, puedes guardarlas en la sesión del usuario
+    request.session['credentials'] = credentials_to_dict(credentials)
+
+    return redirect('/')  # Redirige a la página principal o a donde prefieras
+
+def credentials_to_dict(credentials):
+    return {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes
+    }
+
+def start_auth_flow(request):
+    flow = Flow.from_client_secrets_file(
+        os.path.join(os.path.dirname(__file__), 'credentials.json'),
+        scopes=['https://www.googleapis.com/auth/gmail.send'],
+        redirect_uri='http://localhost:8000/oauth2callback/'
+    )
+    
+    authorization_url, state = flow.authorization_url(
+        access_type='offline',
+        include_granted_scopes='true'
+    )
+    return redirect(authorization_url)
+
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from .serializers import UserCustomerCreateSerializer
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+from googleapiclient.discovery import build
+import pickle
+import os
+
+class UserCustomerOAuth2SignupView(APIView):
+    @swagger_auto_schema(
+        request_body=UserCustomerCreateSerializer,
+        responses={
+            200: openapi.Response(description="Correo de verificación enviado"),
+            400: openapi.Response(description="Error en los datos enviados"),
+            401: openapi.Response(description="Error de autenticación con Google")
+        }
+    )
+    def post(self, request):
+        serializer = UserCustomerCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            # Guardar los datos del usuario temporalmente
+            user_data = serializer.validated_data
+            
+            # Obtener credenciales de OAuth2
+            creds = self.get_oauth2_credentials()
+            
+            if not creds or not creds.valid:
+                if creds and creds.expired and creds.refresh_token:
+                    creds.refresh(Request())
+                else:
+                    return Response({"error": "Se requiere autenticación con Google"}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            # Enviar correo de verificación
+            success = self.send_verification_email(creds, user_data['email'])
+            
+            if success:
+                # Almacenar los datos del usuario en sesión o cache para completar el registro después
+                request.session['pending_user_data'] = user_data
+                return Response({"message": "Correo de verificación enviado"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Error al enviar el correo de verificación"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get_oauth2_credentials(self):
+        creds = None
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+        return creds
+
+    def send_verification_email(self, creds, email):
+        try:
+            service = build('gmail', 'v1', credentials=creds)
+            message = self.create_verification_message(email)
+            service.users().messages().send(userId="me", body=message).execute()
+            return True
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return False
+
+    def create_verification_message(self, to):
+        # Implementa la lógica para crear el mensaje de verificación
+        # Puedes incluir un token de verificación en el enlace
+        pass
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from django.contrib.auth.models import User
+from .models import UserCustomerModel
+from django.core.exceptions import ObjectDoesNotExist
+
+class VerifyEmailView(APIView):
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter('token', openapi.IN_QUERY, description="Token de verificación", type=openapi.TYPE_STRING),
+        ],
+        responses={
+            200: openapi.Response(description="Correo verificado exitosamente"),
+            400: openapi.Response(description="Token inválido o expirado")
+        }
+    )
+    def get(self, request):
+        token = request.GET.get('token')
+        
+        if not token:
+            return Response({"error": "Token no proporcionado"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Aquí deberías implementar la lógica para verificar el token
+        # Por ejemplo, podrías tener una tabla en la base de datos que almacene los tokens y sus fechas de expiración
+        
+        try:
+            # Supongamos que tienes una función que verifica el token y devuelve los datos del usuario
+            user_data = self.verify_token(token)
+            
+            # Crear el usuario y el perfil de cliente
+            user = User.objects.create_user(
+                username=user_data['email'],
+                email=user_data['email'],
+                password=user_data['password']
+            )
+            
+            UserCustomerModel.objects.create(
+                user=user,
+                phone=user_data.get('phone'),
+                buy=user_data.get('buy', False),
+                sell=user_data.get('sell', False),
+                build=user_data.get('build', False),
+                blog=user_data.get('blog', False)
+            )
+            
+            return Response({"message": "Correo verificado y cuenta creada exitosamente"}, status=status.HTTP_200_OK)
+        
+        except ObjectDoesNotExist:
+            return Response({"error": "Token inválido o expirado"}, status=status.HTTP_400_BAD_REQUEST)
+
+    def verify_token(self, token):
+        # Implementa la lógica para verificar el token
+        # Esto podría implicar consultar una base de datos o un servicio de caché
+        pass
