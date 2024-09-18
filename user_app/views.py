@@ -177,7 +177,8 @@ class UserSigninView(APIView):
 
             response = Response({
                 "message": "Inicio de sesión exitoso",
-                "user_type": user_type
+                "user_type": user_type,
+                "acces_token": access_token,
             }, status=status.HTTP_200_OK)
 
             response.set_cookie(
