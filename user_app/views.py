@@ -252,31 +252,32 @@ class ConsultUserCustomerByEmail(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-        operation_description="Consulta los datos de un usuario cliente por email",
+        operation_description="Verifica si el usuario cliente está registrado y si ha completado el segundo registro por email",
         manual_parameters=[
             openapi.Parameter(
                 'email', 
-                openapi.IN_QUERY,  # Se espera que el email sea enviado como parámetro en la query
+                openapi.IN_QUERY,  # Parámetro ahora en la query string
                 description="Email del usuario cliente", 
                 type=openapi.TYPE_STRING
             ),
         ],
         responses={
-            200: openapi.Response(
-                description="Datos del usuario cliente",
-                schema=UserCustomerCompleteSerializer()
-            ),
+            200: openapi.Response(description="Usuario cliente registrado y formulario completo"),
             404: "Usuario cliente no encontrado",
             400: "El usuario no ha completado el segundo registro"
         }
     )
     def get(self, request):
-        email = request.query_params.get('email')  # Obtener el email desde los parámetros de la query
+        email = request.query_params.get('email')
 
         if not email:
-            return Response({"error": "El email es requerido"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Email no proporcionado"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user_customer = get_object_or_404(UserCustomerModel, user__email=email)
+        # Buscar el usuario por email
+        try:
+            user_customer = UserCustomerModel.objects.get(user__email=email)
+        except UserCustomerModel.DoesNotExist:
+            return Response({"error": "Usuario cliente no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
         # Verificar si el usuario ha completado el segundo registro
         if not (user_customer.phone or user_customer.buy or user_customer.sell or user_customer.build or user_customer.blog):
@@ -285,8 +286,8 @@ class ConsultUserCustomerByEmail(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        serializer = UserCustomerCompleteSerializer(user_customer)
-        return Response(serializer.data)
+        # Si todo está correcto, retornar simplemente un mensaje de éxito
+        return Response({"message": "Usuario cliente registrado y formulario completo"}, status=status.HTTP_200_OK)
     
 ## Verificación con Oauth2
 from django.shortcuts import redirect
