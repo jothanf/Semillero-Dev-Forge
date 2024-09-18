@@ -178,7 +178,6 @@ class UserSigninView(APIView):
             response = Response({
                 "message": "Inicio de sesión exitoso",
                 "user_type": user_type,
-                "acces_token": access_token,
             }, status=status.HTTP_200_OK)
 
             response.set_cookie(
@@ -212,7 +211,7 @@ class CheckSessionView(APIView):
 def ConsultarUsuarioCustomerPorId(username or== mail):
     return user.buy, user.sell, user.build, user.blog, user.phone
 
-"""
+
 class ConsultUserCustomerById(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -237,6 +236,47 @@ class ConsultUserCustomerById(APIView):
     )
     def get(self, request, id):
         user_customer = get_object_or_404(UserCustomerModel, user__id=id)
+
+        # Verificar si el usuario ha completado el segundo registro
+        if not (user_customer.phone or user_customer.buy or user_customer.sell or user_customer.build or user_customer.blog):
+            return Response(
+                {"error": "El usuario no ha completado el segundo registro"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = UserCustomerCompleteSerializer(user_customer)
+        return Response(serializer.data)
+"""
+    
+class ConsultUserCustomerByEmail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Consulta los datos de un usuario cliente por email",
+        manual_parameters=[
+            openapi.Parameter(
+                'email', 
+                openapi.IN_QUERY,  # Se espera que el email sea enviado como parámetro en la query
+                description="Email del usuario cliente", 
+                type=openapi.TYPE_STRING
+            ),
+        ],
+        responses={
+            200: openapi.Response(
+                description="Datos del usuario cliente",
+                schema=UserCustomerCompleteSerializer()
+            ),
+            404: "Usuario cliente no encontrado",
+            400: "El usuario no ha completado el segundo registro"
+        }
+    )
+    def get(self, request):
+        email = request.query_params.get('email')  # Obtener el email desde los parámetros de la query
+
+        if not email:
+            return Response({"error": "El email es requerido"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_customer = get_object_or_404(UserCustomerModel, user__email=email)
 
         # Verificar si el usuario ha completado el segundo registro
         if not (user_customer.phone or user_customer.buy or user_customer.sell or user_customer.build or user_customer.blog):

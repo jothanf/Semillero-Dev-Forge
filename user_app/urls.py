@@ -9,7 +9,7 @@ from .views import (
     UserCustomerCompleteSignupView,
     UserCustomerSignoutView,
     CheckSessionView,
-    ConsultUserCustomerById,
+    ConsultUserCustomerByEmail,
     oauth2_callback,
     start_auth_flow,
     UserCustomerOAuth2SignupView,
@@ -27,7 +27,8 @@ urlpatterns = [
 
     path('api/signin/', UserSigninView.as_view(), name='signin'),
 
-    path('api/consult_customer/<int:id>/', ConsultUserCustomerById.as_view(), name='consult_customer'),
+    #path('api/consult_customer/<int:id>/', ConsultUserCustomerById.as_view(), name='consult_customer'),
+    path('api/consult_customer/', ConsultUserCustomerByEmail.as_view(), name='consult_customer_by_email'),
 
     path('docs/', include_docs_urls(title='API Documentation')),
 
